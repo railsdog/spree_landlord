@@ -36,7 +36,7 @@ describe 'super admin users' do
     click_button 'Login'
 
     page.should_not have_content('Invalid email or password')
-    page.should have_content("Logged In As: #{super_admin.email}")
+    page.should have_content("Logged in as: #{super_admin.email}")
   end
 
   it 'can log into the tenant backend it does not belong to' do
@@ -47,7 +47,7 @@ describe 'super admin users' do
     click_button 'Login'
 
     page.should_not have_content('Invalid email or password')
-    page.should have_content("Logged In As: #{super_admin.email}")
+    page.should have_content("Logged in as: #{super_admin.email}")
   end
 
   it 'can create super admin users' do
