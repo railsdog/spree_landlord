@@ -16,7 +16,8 @@ Gem::Specification.new do |s|
   s.requirements << 'none'
 
   s.add_dependency 'spree_core', '~> 1.3.1'
-  s.add_dependency 'spree_auth_devise', '~> 1.3.1'
+# TODO: uncomment when we get a fixed published version
+#  s.add_dependency 'spree_auth_devise', '~> 1.3.1'
   s.add_dependency 'spree_promo', '~> 1.3.1'
   s.add_development_dependency 'ffaker', '~> 1.12.1'
 

@@ -1,7 +1,5 @@
 module Spree
-  include SpreeLandlord::Tenantizable
-
   Landlord.model_names.each do |model|
-    tenantize(model)
+    model.send(:include, SpreeLandlord::TenantedModel)
   end
 end
