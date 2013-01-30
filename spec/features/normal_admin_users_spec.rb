@@ -41,7 +41,7 @@ describe 'normal admin users' do
     click_button 'Login'
 
     page.should have_content('Invalid email or password')
-    page.should_not have_content("Logged an as: #{apples_admin.email}")
+    page.should_not have_content("Logged in as: #{apples_admin.email}")
   end
 
   it 'cannot create a super admin' do
