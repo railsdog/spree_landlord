@@ -30,7 +30,7 @@ describe 'normal admin users' do
     click_button 'Login'
 
     page.should_not have_content('Invalid email or password')
-    page.should have_content("Logged In As: #{apples_admin.email}")
+    page.should have_content("#{I18n.t(:logged_in_as)}: #{apples_admin.email}")
   end
 
   it 'cannot log into a different tenant' do
@@ -41,7 +41,7 @@ describe 'normal admin users' do
     click_button 'Login'
 
     page.should have_content('Invalid email or password')
-    page.should_not have_content("Logged In As: #{apples_admin.email}")
+    page.should_not have_content("#{I18n.t(:logged_in_as)}: #{apples_admin.email}")
   end
 
   it 'cannot create a super admin' do
