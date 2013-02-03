@@ -18,7 +18,7 @@ module Spree
       end
 
       def create_tenants_admin_role
-        role = Spree::Role.new(name: 'spree_admin')
+        role = Spree::Role.new(name: 'super_admin')
         role.tenant = first_tenant
         role.save!
         role
