@@ -25,6 +25,8 @@ Spree::User.class_eval do
 
   def ensure_at_least_one_super_admin_exists
     unless super_admin_exists?
+      super_admin_role = Spree::Role.find_or_create_by_name 'super_admin'
+      self.spree_roles << super_admin_role
       self.super_admin = true
     end
   end
