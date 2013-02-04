@@ -32,7 +32,7 @@ Spree::User.class_eval do
   end
 
   def ensure_super_admin_is_admin
-    if self.super_admin?
+    if self.super_admin? && !self.has_spree_role?(:admin)
       admin_role = Spree::Role.find_or_create_by_name 'admin'
       self.spree_roles << admin_role
     end

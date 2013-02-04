@@ -53,4 +53,17 @@ describe Spree::User do
 
     user.should have_spree_role(:admin)
   end
+
+  it 'does not assign admin role when super_admin is set to true and user already has admin role' do
+    default_admin = Spree::User.create(email: 'admin@example.com', password: 'spree123')
+    user = Spree::User.create!(email: 'test@example.com', password: 'spree123')
+
+    admin_role = Spree::Role.find_or_create_by_name 'admin'
+    user.spree_roles << admin_role
+    user.super_admin = true
+    user.save!
+
+    user.spree_roles.where(name: 'admin').count.should eq(1)
+  end
+
 end
