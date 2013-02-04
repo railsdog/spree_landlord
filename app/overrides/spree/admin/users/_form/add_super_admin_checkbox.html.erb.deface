@@ -1,4 +1,4 @@
-<!-- insert_after "[data-hook='admin_user_form_roles'] ul" -->
+<!-- insert_bottom "[data-hook='admin_user_form_roles'] ul" -->
 <% if can? :grant_super_admin, f.object %>
   <li>
     <%= f.check_box :super_admin %>
