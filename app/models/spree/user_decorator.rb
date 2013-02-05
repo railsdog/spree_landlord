@@ -1,4 +1,6 @@
 Spree::User.class_eval do
+  attr_accessible :super_admin
+
   # ugly hack to remove the uniqueness validator on email
   _validate_callbacks.reject! do |callback|
     callback.raw_filter.kind_of?(ActiveRecord::Validations::UniquenessValidator) &&
@@ -15,7 +17,7 @@ Spree::User.class_eval do
   }
 
   before_save :ensure_at_least_one_super_admin_exists
-  before_save :ensure_super_admin_is_admin
+  after_save :ensure_super_admin_is_admin
 
   protected
 
@@ -25,8 +27,6 @@ Spree::User.class_eval do
 
   def ensure_at_least_one_super_admin_exists
     unless super_admin_exists?
-      super_admin_role = Spree::Role.find_or_create_by_name 'super_admin'
-      self.spree_roles << super_admin_role
       self.super_admin = true
     end
   end
