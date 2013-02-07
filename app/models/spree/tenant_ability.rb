@@ -14,22 +14,9 @@ module Spree
       # _anything_ to a super_admin Spree::User
       [:manage, :admin, :edit, :update, :delete].each do |action|
         if !user.super_admin
-          cannot action, Spree::User, :super_admin => true
-          can action, Spree::User, :id => user.id # allow access to yourself
+          cannot action, Spree::User, super_admin: true
         end
       end
-=begin
-      cannot do |action, subject_class, subject|
-        if subject_class == Spree::User
-          if [:manage, :admin, :edit, :update, :delete].include?(action)
-            if subject.super_admin?
-              !user.super_admin
-            end
-          end
-        end
-      end
-=end
-
     end
 
     Spree::Ability.register_ability(Spree::TenantAbility)
