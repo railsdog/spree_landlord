@@ -10,13 +10,11 @@ module Spree
         cannot :grant_super_admin, Spree::User
       end
 
-      cannot do |action, subject_class, subject|
-        if subject_class == Spree::User
-          if [:manage, :admin, :edit, :update, :delete].include?(action)
-            if subject.super_admin?
-              !user.super_admin
-            end
-          end
+      # if you are not a super_admin, you can not do
+      # _anything_ to a super_admin Spree::User
+      [:manage, :admin, :edit, :update, :delete].each do |action|
+        if !user.super_admin
+          cannot action, Spree::User, super_admin: true
         end
       end
     end
