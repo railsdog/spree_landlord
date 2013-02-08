@@ -254,7 +254,7 @@ module Spree
         ]
 
         countries_data.each do |country_data|
-          Spree::Country.new(country_data.reject { |key| key == :id }).tap do |c|
+          Spree::Country.new(country_data.reject { |key| key == :id }, without_protection: true).tap do |c|
             c.tenant_id = @tenant.id
             c.save!
           end
@@ -318,7 +318,7 @@ module Spree
 
         states_data.each do |state_data|
           country_iso = state_data.delete('country_iso')
-          Spree::State.new(state_data).tap do |s|
+          Spree::State.new(state_data, without_protection: true).tap do |s|
             s.country = Spree::Country.unscoped.where(iso: country_iso, tenant_id: @tenant.id).first
             s.tenant_id = @tenant.id
             s.save!
@@ -333,7 +333,7 @@ module Spree
         ]
 
         zones_data.each do |zone_data|
-          Spree::Zone.new(zone_data).tap do |z|
+          Spree::Zone.new(zone_data, without_protection: true).tap do |z|
             z.tenant_id = @tenant.id
             z.save!
           end
@@ -373,7 +373,7 @@ module Spree
         ]
 
         zone_members_data.each do |zone_member_data|
-          Spree::ZoneMember.new(zone_member_data).tap do |zm|
+          Spree::ZoneMember.new(zone_member_data, without_protection: true).tap do |zm|
             zm.tenant_id = @tenant.id
             zm.save!
           end
