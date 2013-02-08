@@ -5,6 +5,8 @@ module Spree
     before_validation :downcase_shortname
     before_validation :ensure_name_is_present
 
+    after_create :seed_tenant
+
     ['domain', 'shortname'].each do |attrib|
       validates attrib.to_sym, uniqueness: true, presence: true
     end
@@ -55,6 +57,10 @@ module Spree
       if attribute_names.include?('name')
         self.name ||= self.shortname.humanize.titleize if self.shortname.present?
       end
+    end
+
+    def seed_tenant
+      Spree::SpreeLandlord::TenantSeeder.new(self).seed
     end
   end
 end

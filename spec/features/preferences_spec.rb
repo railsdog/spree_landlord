@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe 'preferences' do
-  let!(:alpha_tenant) { FactoryGirl.create(:tenant, shortname: 'alpha') }
-  let!(:beta_tenant) { FactoryGirl.create(:tenant, shortname: 'beta') }
+  let!(:alpha_tenant) { Spree::Tenant.create!(:shortname => 'alpha', :domain => 'alpha.dev') }
+  let!(:beta_tenant) { Spree::Tenant.create!(:shortname => 'beta', :domain => 'beta.dev') }
 
   let!(:super_admin) {
     Spree::User.create!(email: 'super@example.com', password: 'spree123')
