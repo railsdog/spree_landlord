@@ -100,7 +100,14 @@ namespace :db do
     Spree::SpreeLandlord::TenantMigrator.new.move_unassigned_to_master
   end
 
-  task :migrate => :reset_column_information
+  task :migrate => :reset_column_information do
+    # clear tables that are seeded by spree_core
+    Spree::Country.delete_all
+    Spree::State.delete_all
+    Spree::Zone.delete_all
+    Spree::Role.delete_all
+    Spree::ZoneMember.delete_all
+  end
 
   task :reset_column_information do
     ActiveRecord::Base.send(:subclasses).each do |model|

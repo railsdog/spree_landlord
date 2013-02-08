@@ -63,8 +63,8 @@ describe Spree::Tenant do
 
     context 'when there are tenants' do
       it 'treats the first tenant as the master' do
-        first_tenant = FactoryGirl.create(:tenant)
-        second_tenant = FactoryGirl.create(:tenant)
+        first_tenant = Spree::Tenant.create!(shortname: 'first', domain: 'first.dev')
+        second_tenant = Spree::Tenant.create!(shortname: 'second', domain: 'second.dev')
 
         Spree::Tenant.master.should == first_tenant
       end
@@ -93,7 +93,8 @@ describe Spree::Tenant do
 
     context 'when current thread has no tenant id' do
       it 'returns the master tenant id' do
-        tenant = FactoryGirl.create(:tenant)
+        tenant = Spree::Tenant.create(shortname: 'test', domain: 'test.dev')
+        Thread.current[:tenant_id] = nil
         Spree::Tenant.should_receive(:master).and_return(tenant)
 
         Spree::Tenant.current_tenant_id.should == tenant.id
@@ -106,7 +107,7 @@ describe Spree::Tenant do
       Thread.current[:tenant_id] = nil
     end
 
-    let(:tenant) { FactoryGirl.create(:tenant) }
+    let(:tenant) { Spree::Tenant.create!(shortname: 'test', domain: 'test.dev') }
 
     context 'with an integer' do
       it 'sets the tenant id stored in the current thread' do
@@ -129,6 +130,16 @@ describe Spree::Tenant do
       end
     end
 
+    context 'with nil' do
+      it 'set the tenant id to the id of the master tenant' do
+        Thread.current[:tenant_id].should == nil
+
+        Spree::Tenant.set_current_tenant(nil)
+
+        Thread.current[:tenant_id].should == Spree::Tenant.master.id
+      end
+    end
+
     context 'with something else' do
       it 'raises an exception' do
         expect {
@@ -138,4 +149,33 @@ describe Spree::Tenant do
     end
   end
 
+  context '#create' do
+    let(:created_tenant) do
+      Spree::Tenant.create!(shortname: 'temp', domain: 'temp.info')
+    end
+
+    before do
+      Spree::Tenant.set_current_tenant(created_tenant)
+    end
+
+    it 'seeds tenant with roles' do
+      expect(Spree::Role.count).to be > 0
+    end
+
+    it 'seeds tenant with states' do
+      expect(Spree::State.count).to be > 0
+    end
+
+    it 'seeds tenant with countries' do
+      expect(Spree::Country.count).to be > 0
+    end
+
+    it 'seeds tenant with zones' do
+      expect(Spree::Zone.count).to be > 0
+    end
+
+    it 'seeds tenant with zone_members' do
+      expect(Spree::ZoneMember.count).to be > 0
+    end
+  end
 end

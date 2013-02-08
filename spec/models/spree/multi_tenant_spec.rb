@@ -18,7 +18,7 @@ Spree::Landlord.model_names.each do |model_name|
 
       context 'with new instances' do
         context 'when the current tenant is explicitly set' do
-          let(:tenant) { FactoryGirl.create(:tenant) }
+          let(:tenant) { Spree::Tenant.create!(shortname: 'test', domain: 'test.dev') }
 
           before do
             Spree::Tenant.set_current_tenant(tenant)

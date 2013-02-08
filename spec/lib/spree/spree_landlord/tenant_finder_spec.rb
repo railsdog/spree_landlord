@@ -5,9 +5,9 @@ describe Spree::SpreeLandlord::TenantFinder do
   describe '#find_target_tenant' do
     subject(:finder) { Spree::SpreeLandlord::TenantFinder.new }
     before { Spree::Tenant.destroy_all }
-    let!(:master) { FactoryGirl.create(:tenant, :shortname => 'master', :domain => 'master.com') }
-    let!(:apples) { FactoryGirl.create(:tenant, :shortname => 'apples', :domain => 'apples.com') }
-    let!(:oranges) { FactoryGirl.create(:tenant, :shortname => 'oranges', :domain => 'oranges.com') }
+    let!(:master) { Spree::Tenant.create!(:shortname => 'master', :domain => 'master.com') }
+    let!(:apples) { Spree::Tenant.create!(:shortname => 'apples', :domain => 'apples.com') }
+    let!(:oranges) { Spree::Tenant.create!(:shortname => 'oranges', :domain => 'oranges.com') }
 
     def request(uri)
       env = Rack::MockRequest.env_for(uri)

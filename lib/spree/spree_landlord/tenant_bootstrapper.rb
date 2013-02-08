@@ -4,9 +4,17 @@ module Spree
       attr_reader :first_tenant
 
       def run
+        clear_column_cache
         create_first_tenant
         create_tenants_admin_role
         notify
+      end
+
+      def clear_column_cache
+        Spree::Tenant.connection.schema_cache.clear!
+        Spree::Landlord.model_names.each do |model|
+          model.reset_column_information
+        end
       end
 
       def create_first_tenant

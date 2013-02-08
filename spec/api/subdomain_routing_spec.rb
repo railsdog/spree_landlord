@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe 'subdomain routing' do
   let!(:master_tenant) { Spree::Tenant.master }
-  let!(:apples_tenant) { FactoryGirl.create(:tenant, :shortname => 'apples') }
-  let!(:oranges_tenant) { FactoryGirl.create(:tenant, :shortname => 'oranges') }
-  let!(:mixed_tenant) { FactoryGirl.create(:tenant, :shortname => 'Mixed') }
+  let!(:apples_tenant) { Spree::Tenant.create!(:shortname => 'apples', :domain => 'apples.dev') }
+  let!(:oranges_tenant) { Spree::Tenant.create!(:shortname => 'oranges', :domain => 'oranges.dev') }
+  let!(:mixed_tenant) { Spree::Tenant.create!(:shortname => 'Mixed', :domain => 'mixed.dev') }
 
   let!(:apple) {
     Spree::Tenant.set_current_tenant(apples_tenant)
