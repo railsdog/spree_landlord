@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe 'preferences' do
-  let!(:apples_tenant) { FactoryGirl.create(:tenant, :shortname => 'apples', :domain => 'apples.com') }
-  let!(:oranges_tenant) { FactoryGirl.create(:tenant, :shortname => 'oranges', :domain => 'oranges.com') }
+  let!(:apples_tenant) { Spree::Tenant.create!(:shortname => 'apples', :domain => 'apples.com') }
+  let!(:oranges_tenant) { Spree::Tenant.create!(:shortname => 'oranges', :domain => 'oranges.com') }
 
   let!(:apples_tenant_site_name) {
     Spree::Tenant.set_current_tenant(apples_tenant)

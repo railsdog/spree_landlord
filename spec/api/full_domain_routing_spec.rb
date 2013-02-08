@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe 'full domain routing' do
-  let!(:apples_tenant) { FactoryGirl.create(:tenant, :shortname => 'apples', :domain => 'apples.com', name: "Apple") }
-  let!(:oranges_tenant) { FactoryGirl.create(:tenant, :shortname => 'oranges', :domain => 'oranges.com', name: "Orange") }
+  let!(:apples_tenant) { Spree::Tenant.create!(:shortname => 'apples', :domain => 'apples.com', :name => 'Apple') }
+  let!(:oranges_tenant) { Spree::Tenant.create!(:shortname => 'oranges', :domain => 'oranges.com', :name => 'Orange') }
 
   let!(:apple) {
     Spree::Tenant.set_current_tenant(apples_tenant)
