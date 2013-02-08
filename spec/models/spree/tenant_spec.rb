@@ -94,6 +94,7 @@ describe Spree::Tenant do
     context 'when current thread has no tenant id' do
       it 'returns the master tenant id' do
         tenant = Spree::Tenant.create(shortname: 'test', domain: 'test.dev')
+        Thread.current[:tenant_id] = nil
         Spree::Tenant.should_receive(:master).and_return(tenant)
 
         Spree::Tenant.current_tenant_id.should == tenant.id
@@ -126,6 +127,16 @@ describe Spree::Tenant do
       it 'sets the tenant id stored in the current thread to the tenant instance id' do
         Spree::Tenant.set_current_tenant(tenant)
         Thread.current[:tenant_id].should == tenant.id
+      end
+    end
+
+    context 'with nil' do
+      it 'set the tenant id to the id of the master tenant' do
+        Thread.current[:tenant_id].should == nil
+
+        Spree::Tenant.set_current_tenant(nil)
+
+        Thread.current[:tenant_id].should == Spree::Tenant.master.id
       end
     end
 

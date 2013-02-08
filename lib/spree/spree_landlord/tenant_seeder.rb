@@ -8,6 +8,7 @@ module Spree
       def seed
         seed_roles
         seed_countries
+        set_default_country_id
         seed_states
         seed_zones
         seed_zone_members
@@ -259,6 +260,14 @@ module Spree
             c.save!
           end
         end
+      end
+
+      def set_default_country_id
+        old_current_tenant_id = Spree::Tenant.current_tenant_id
+        Spree::Tenant.set_current_tenant(@tenant)
+        united_states = Spree::Country.where(iso: 'US').first
+        Spree::Config[:default_country_id] = united_states.id
+        Spree::Tenant.set_current_tenant(old_current_tenant_id)
       end
 
       def seed_states

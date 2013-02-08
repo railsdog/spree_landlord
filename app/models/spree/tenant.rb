@@ -31,17 +31,25 @@ module Spree
       end
 
       def set_current_tenant( tenant )
-        # able to handle tenant obj or tenant_id
-        case tenant
-          when Tenant then tenant_id = tenant.id
-          when Integer then
-            tenant_id = tenant
-            unless Spree::Tenant.exists?(tenant_id)
-              raise Spree::SpreeLandlord::TenantNotFound, "No tenant found with id = #{tenant_id}"
-            end
-          else
-            raise ArgumentError, "invalid tenant object or id"
-        end  # case
+        tenant_id = nil
+
+        if tenant.present?
+          # able to handle tenant obj or tenant_id
+          case tenant
+            when Tenant then tenant_id = tenant.id
+            when Integer then
+              tenant_id = tenant
+              unless Spree::Tenant.exists?(tenant_id)
+                raise Spree::SpreeLandlord::TenantNotFound, "No tenant found with id = #{tenant_id}"
+              end
+            else
+              raise ArgumentError, "invalid tenant object or id"
+          end  # case
+        else
+          tenant_id = Spree::Tenant.master.id
+        end
+
+        raise "Invalid tenant id" if tenant_id.nil?
 
         Thread.current[:tenant_id] = tenant_id
       end

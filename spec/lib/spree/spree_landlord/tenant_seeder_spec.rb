@@ -79,6 +79,12 @@ describe Spree::SpreeLandlord::TenantSeeder do
       end
     end
 
+    it 'sets default_country_id preference to a tenanted country' do
+      Spree::Tenant.set_current_tenant(tenant)
+      united_states = Spree::Country.where(iso: 'US').first
+      expect(Spree::Config[:default_country_id]).to eq(united_states.id)
+    end
+
     it 'generates all states in spree_core' do
       united_states = Spree::Country.where(:iso => 'US').first
 
