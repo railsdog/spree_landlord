@@ -2,13 +2,13 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_landlord'
-  s.version     = '1.2.0'
-  s.summary     = 'TODO: Add gem summary here'
-  s.description = 'TODO: Add (optional) gem description here'
+  s.version     = '1.3.0.beta'
+  s.summary     = 'Spree multi-tenant extension'
+  s.description = 'Provides support for hosting multiple e-commerce stores from a single Rails app.'
   s.required_ruby_version = '>= 1.8.7'
 
-  s.author    = ['John Dilts', 'M. Scott Ford']
-  s.email     = ['iam@hybridindie.com', 'scott@mscottford.com']
+  s.author    = ['John Dilts', 'M. Scott Ford', 'Jeff Squires']
+  s.email     = ['iam@hybridindie.com', 'scott@mscottford.com', 'jeff.squires@gmail.com']
 
   s.files       = `git ls-files`.split("\n")
   s.test_files  = `git ls-files -- {spec}/*`.split("\n")
