@@ -9,6 +9,7 @@ require File.expand_path('../dummy/config/environment.rb',  __FILE__)
 
 require 'rspec/rails'
 require 'ffaker'
+require 'deface'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -20,6 +21,7 @@ require 'spree/core/testing_support/authorization_helpers'
 require 'spree/core/url_helpers'
 require 'spree/core/testing_support/flash'
 require 'spree/core/testing_support/preferences'
+require 'spree/core/testing_support/controller_requests'
 
 require File.dirname(__FILE__) + "/factories"
 
@@ -35,6 +37,7 @@ RSpec.configure do |config|
   config.include Spree::Core::UrlHelpers
   config.include Spree::Core::TestingSupport::Flash
   config.include Spree::Core::TestingSupport::Preferences
+  config.include Spree::Core::TestingSupport::ControllerRequests, :type => :controller
 
   # == Mock Framework
   #
@@ -55,5 +58,17 @@ RSpec.configure do |config|
 
   config.before(:each) do
     Thread.current[:tenant_id] = nil
+  end
+end
+
+# Dummy Deface instance for testing actions / applicator
+class DefaceDummy
+  extend Deface::Applicator::ClassMethods
+  extend Deface::Search::ClassMethods
+
+  attr_reader :parsed_document
+
+  def self.all
+    Rails.application.config.deface.overrides.all
   end
 end
