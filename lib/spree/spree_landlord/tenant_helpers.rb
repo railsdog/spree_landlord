@@ -16,8 +16,13 @@ module Spree
 
       def add_tenant_view_path
         tenant = Tenant.current_tenant
-        path = "app/tenants/#{tenant.shortname}/views"
-        prepend_view_path(path)
+        compiled_tenant_path = "app/compiled_views/tenants/#{tenant.shortname}"
+        tenant_path = "app/tenants/#{tenant.shortname}/views"
+
+        root = Rails.application.root.to_s
+
+        prepend_view_path("#{root}/#{tenant_path}")
+        prepend_view_path("#{root}/#{compiled_tenant_path}")
       end
     end
   end

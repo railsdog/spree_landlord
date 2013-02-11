@@ -2,10 +2,13 @@ module Spree
   module SpreeLandlord
     class Engine < Rails::Engine
       require 'spree/core'
+      require 'deface'
+
       isolate_namespace Spree
       engine_name 'spree_landlord'
 
       config.autoload_paths += %W(#{config.root}/lib)
+
       config.current_tenant_name = ENV['TENANT_NAME']
 
       # use rspec for tests
@@ -13,10 +16,23 @@ module Spree
         g.test_framework :rspec
       end
 
+      # this is CRITICAL! - Deface sets everything up in its activate method,
+      # so we need to make sure we have all of our decorators loaded before that happens
+      config.before_initialize do
+        Dir.glob(File.join(File.dirname(__FILE__), '../../../lib/**/*_decorator*.rb')) do |c|
+          Rails.configuration.cache_classes ? require(c) : load(c)
+        end
+      end
+  
       def self.activate
         Dir.glob(File.join(File.dirname(__FILE__), '../../../app/**/*_decorator*.rb')) do |c|
           Rails.configuration.cache_classes ? require(c) : load(c)
         end
+
+        Dir.glob(File.join(File.dirname(__FILE__), '../../../lib/**/*_decorator*.rb')) do |c|
+          Rails.configuration.cache_classes ? require(c) : load(c)
+        end
+
         Spree::Ability.register_ability(Spree::TenantAbility)
 
         ActiveSupport.on_load(:action_controller) do
@@ -25,6 +41,22 @@ module Spree
       end
 
       config.to_prepare &method(:activate).to_proc
+
+      # remove app/overrides from eager_load_path for app and all railites
+      # as we require them manually depending on configuration values
+      #
+      initializer "landlord.deface.tweak_eager_loading", :before => :set_load_path do |app|
+
+        # application
+        app.config.eager_load_paths.reject! {|path| path  =~ /app\/tenants\z/ }
+
+        # railites / engines / extensions
+        app.railties.all.each do |railtie|
+          next unless railtie.respond_to? :root
+
+          railtie.config.eager_load_paths.reject! {|path| path  =~ /app\/tenants\z/ }
+        end
+      end
 
       # based on `initializer "sprockets.environment"` in rails-3.2/actionpack/lib/sprockets/railtie.rb
       initializer "landlord.assets.environment", :group => :all do |app|
