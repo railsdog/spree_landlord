@@ -37,8 +37,10 @@ describe Spree::SpreeLandlord::TenantFinder do
     end
 
     describe 'subdomains on master domain' do
-      it 'permits use of unknown subdomains' do
-        finder.find_target_tenant(request('http://www.master.com')).should == master
+      it 'does not permit use of unknown subdomains' do
+        expect {
+          finder.find_target_tenant(request('http://blahblah.master.com'))
+        }.to raise_error(Spree::SpreeLandlord::TenantNotFound, "No tenant could be found for 'blahblah.master.com'")
       end
 
       it 'honors known subdomain' do
