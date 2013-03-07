@@ -5,7 +5,7 @@ module Spree
 
       included do
         before_filter :set_current_tenant
-        before_filter :add_tenant_view_path
+        before_filter :set_current_tenant_view_path
       end
 
       def set_current_tenant
@@ -14,7 +14,7 @@ module Spree
         Spree::Tenant.set_current_tenant(tenant)
       end
 
-      def add_tenant_view_path
+      def set_current_tenant_view_path
         tenant = Tenant.current_tenant
         path = "app/tenants/#{tenant.shortname}/views"
         prepend_view_path(path)
