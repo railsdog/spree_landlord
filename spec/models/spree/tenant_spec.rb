@@ -22,6 +22,14 @@ describe Spree::Tenant do
     it 'is required' do
       assert_requires_attribute(:shortname)
     end
+
+    it "enforces a url-friendly value" do
+      tenant = Spree::Tenant.new
+      tenant.domain = 'foo.com'
+      tenant.shortname = 'SHORT NAME'
+      tenant.valid?
+      tenant.errors.messages[:shortname].should be_present
+    end
   end
 
   describe '#name' do
