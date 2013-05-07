@@ -41,6 +41,7 @@ Create a tenant. This will ask you for a `shortname`, and a `domain`. The `short
 $ bundle exec rake spree_landlord:tenant:create
 ```
 
+Note that it is CRITICAL that you use the latest version of deface in your application's Gemfile.  The decorators used in this extension won't work w/ the version of deface that ships in recent versions of spree
 ## Contributors
 
 * [John Dilts](https://github.com/jbrien)

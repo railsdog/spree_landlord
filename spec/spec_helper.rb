@@ -1,6 +1,10 @@
 # move support/test_app_fixtures tree into spec/dummy
 require 'fileutils'
-FileUtils.cp_r "#{File.expand_path('../test_app_fixtures/.', __FILE__)}/.", File.expand_path('../dummy', __FILE__)
+FileUtils.cp_r './spec/test_app_fixtures/.','./spec/dummy'
+# so these get added to the lookup path
+# if we don't do this and dynamically create compiled views
+# during our tests, it is too late; deface has already initialized
+FileUtils.mkdir_p './spec/dummy/app/compiled_views' 
 
 # Configure Rails Environment
 ENV['RAILS_ENV'] = 'test'
@@ -9,6 +13,7 @@ require File.expand_path('../dummy/config/environment.rb',  __FILE__)
 
 require 'rspec/rails'
 require 'ffaker'
+require 'deface'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -20,6 +25,7 @@ require 'spree/core/testing_support/authorization_helpers'
 require 'spree/core/url_helpers'
 require 'spree/core/testing_support/flash'
 require 'spree/core/testing_support/preferences'
+require 'spree/core/testing_support/controller_requests'
 
 require File.dirname(__FILE__) + "/factories"
 
@@ -35,6 +41,7 @@ RSpec.configure do |config|
   config.include Spree::Core::UrlHelpers
   config.include Spree::Core::TestingSupport::Flash
   config.include Spree::Core::TestingSupport::Preferences
+  config.include Spree::Core::TestingSupport::ControllerRequests, :type => :controller
 
   # == Mock Framework
   #
