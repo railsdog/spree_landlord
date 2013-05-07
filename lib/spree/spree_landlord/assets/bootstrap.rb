@@ -16,7 +16,9 @@ module Spree
           return unless app.tenants_assets
 
           app.tenants_assets.each do |tenant, tenant_assets|
-            (Pathname.new(tenant_assets.root) + 'app' + 'tenants' + tenant + 'assets').children.select { |d| d.directory? }.each do |path|
+            tenant_assets_path = Pathname.new(tenant_assets.root) + 'app' + 'tenants' + tenant + 'assets'
+            break unless tenant_assets_path.exist?
+            tenant_assets_path.children.select { |d| d.directory? }.each do |path|
               tenant_assets.append_path(path)
             end
             config.assets.paths.each { |path| tenant_assets.append_path(path) }
