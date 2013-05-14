@@ -1,0 +1,5 @@
+/ 
+  remove 'h1'
+  tenant_name 'hamlorange'
+
+this is bogus text but i need this or the comments above get placed into the :haml key

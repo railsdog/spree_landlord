@@ -1,6 +1,18 @@
 require 'spec_helper'
 
 describe 'Tenant checkout process' do
+  def disable_inventory_tracking
+    Spree::Tenant.set_current_tenant(alpha_tenant)
+    Spree::Config[:track_inventory_levels] = false
+
+    Spree::Tenant.set_current_tenant(beta_tenant)
+    Spree::Config[:track_inventory_levels] = false
+  end
+
+  before do
+    disable_inventory_tracking
+  end
+
   let!(:alpha_tenant) { Spree::Tenant.create!(shortname: 'alpha', domain: 'alpha.dev') }
   let!(:beta_tenant) { Spree::Tenant.create!(shortname: 'beta', domain: 'beta.dev') }
 
