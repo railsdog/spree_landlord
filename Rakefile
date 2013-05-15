@@ -22,9 +22,6 @@ RSpec::Core::RakeTask.new
 task :default => [:spec]
 
 task :test_app do
-  %w( spree_landlord ).each do |engine|
-    ENV['LIB_NAME'] = File.join(engine)
-    ENV['DUMMY_PATH'] = File.expand_path("../../#{engine}/spec/dummy", __FILE__)
-    Rake::Task['common:test_app'].execute(Rake::TaskArguments.new([:user_class], ['Spree::User']))
-  end
+  ENV['LIB_NAME'] = 'spree_landlord'
+  Rake::Task['common:test_app'].execute(Rake::TaskArguments.new([:user_class], ['Spree::User']))
 end
