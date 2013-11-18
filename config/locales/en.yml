@@ -3,3 +3,4 @@
 
 en:
   login: "Login"
+  tenant_name_not_url_friendly: "The short name must be URL-friendly"

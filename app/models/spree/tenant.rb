@@ -7,6 +7,8 @@ module Spree
 
     after_create :seed_tenant
 
+    validate :shortname_is_url_friendly
+
     ['domain', 'shortname'].each do |attrib|
       validates attrib.to_sym, uniqueness: true, presence: true
     end
@@ -64,6 +66,12 @@ module Spree
     def ensure_name_is_present
       if attribute_names.include?('name')
         self.name ||= self.shortname.humanize.titleize if self.shortname.present?
+      end
+    end
+
+    def shortname_is_url_friendly
+      unless self.shortname == URI.encode(self.shortname)
+        errors.add(:shortname, I18n.t(:tenant_name_not_url_friendly)) 
       end
     end
 
