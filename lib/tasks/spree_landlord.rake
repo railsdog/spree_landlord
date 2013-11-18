@@ -73,13 +73,16 @@ namespace :spree_landlord do
           brand = Spree::Taxon.create!(name: brand_name)
           brands.root.children << brand
         end
-
+        random=Random.new
         50.times do
           product_name = Faker::Product.product_name
           puts "... Creating product #{product_name}"
+          price=PRICES.sample
           product = Spree::Product.create!(
             name: product_name,
-            price: PRICES.sample,
+            price: price,
+            cost_price: price*random.rand(0.4..0.6),
+            msrp: price*random.rand(1.4..1.8),
             available_on: 1.week.ago,
             description: Faker::Lorem.paragraph(10))
           open("http://cambelt.co/390x320/#{CGI.escape(product_name)}?color=234653,eeeeee") do |image_io|
